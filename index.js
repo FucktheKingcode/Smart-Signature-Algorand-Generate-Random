@@ -13,8 +13,10 @@ async function main() {
   const suggestedParams = await client.getTransactionParams().do();
 
   // example: LSIG_COMPILE
+  const timestamp = Date.now(); // Sử dụng timestamp để tạo giá trị duy nhất
   const randomValue = Math.floor(Math.random() * 1000000); // Tạo giá trị ngẫu nhiên
-  const smartSigSource = `#pragma version 8\nint ${randomValue}\nreturn`; // Thêm giá trị ngẫu nhiên vào mã nguồn
+  const uniqueValue = `${timestamp}${randomValue}`; // Kết hợp timestamp và giá trị ngẫu nhiên
+  const smartSigSource = `#pragma version 8\nint ${uniqueValue}\nreturn`; // Thêm giá trị duy nhất vào mã nguồn
   const result = await client.compile(Buffer.from(smartSigSource)).do();
 
   // Hash is equivalent to the contract address
